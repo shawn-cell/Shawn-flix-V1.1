@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shawn-Flix - Ultimate Anime Hub</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍥</text></svg>">
+</head>
+<body>
+    <!-- Background Particles -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+        <button class="theme-btn" data-theme="dark" title="Dark Mode">🌙</button>
+        <button class="theme-btn" data-theme="light" title="Light Mode">☀️</button>
+        <button class="theme-btn" data-theme="purple" title="Purple Mode">💜</button>
+    </div>
+
+    <!-- Music Player -->
+    <div id="musicPlayer" class="music-player">
+        <div class="music-toggle" onclick="toggleMusic()">🎵</div>
+        <div class="music-controls" style="display:none;">
+            <button onclick="playMusic()">▶️</button>
+            <span id="musicTitle">🎶 Anime Vibes</span>
+            <button onclick="nextMusic()">⏭️</button>
+            <button onclick="toggleMusic()">✖️</button>
+        </div>
+    </div>
+
+    <header>
+        <h1>🍥 Shawn-Flix</h1>
+        <p>Discover, watch, and track your anime journey</p>
+    </header>
+
+    <!-- Fact Ticker -->
+    <div class="fact-ticker">
+        <span>💡 Did you know?</span>
+        <span id="factText">Loading anime facts...</span>
+    </div>
+
+    <!-- Seasonal Banner -->
+    <div class="seasonal-banner" id="seasonalBanner">
+        <div class="banner-content">
+            <span class="banner-icon">🌸</span>
+            <span class="banner-text">Currently Airing: Spring 2026</span>
+            <span class="banner-countdown" id="seasonCountdown"></span>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="tab-nav">
+        <button class="tab-btn active" data-tab="browse">🔍 Browse</button>
+        <button class="tab-btn" data-tab="watchlist">📋 My Watchlist</button>
+        <button class="tab-btn" data-tab="top100">🏆 Top 100</button>
+        <button class="tab-btn" data-tab="community">💬 Community</button>
+        <button class="tab-btn" data-tab="quiz">🎯 Quiz</button>
+    </nav>
+
+    <!-- ============================================ -->
+    <!-- BROWSE TAB -->
+    <!-- ============================================ -->
+    <main id="browseTab" class="tab-content active">
+        <section class="search-section">
+            <input type="text" id="searchInput" placeholder="Search anime... (Ctrl+/) " />
+            <button id="searchBtn">Search</button>
+            <button id="randomBtn" class="random-btn">🎲 Surprise Me!</button>
+        </section>
+
+        <!-- Genre Filters -->
+        <div class="genre-filters">
+            <button class="genre-btn active" data-genre="all">✨ All</button>
+            <button class="genre-btn" data-genre="1">⚔️ Action</button>
+            <button class="genre-btn" data-genre="4">😂 Comedy</button>
+            <button class="genre-btn" data-genre="22">💕 Romance</button>
+            <button class="genre-btn" data-genre="10">🎭 Fantasy</button>
+            <button class="genre-btn" data-genre="7">🤯 Mystery</button>
+            <button class="genre-btn" data-genre="8">😱 Horror</button>
+            <button class="genre-btn" data-genre="27">🏎️ Shounen</button>
+        </div>
+
+        <!-- Character of the Day -->
+        <section class="character-section">
+            <h2>🌟 Character of the Day</h2>
+            <div id="characterDisplay" class="character-card">
+                <div class="character-loading">⏳ Loading...</div>
+            </div>
+        </section>
+
+        <!-- Recently Viewed -->
+        <section id="recentSection">
+            <h2>🕐 Recently Viewed</h2>
+            <div id="recentGrid" class="grid"></div>
+        </section>
+
+        <section id="results">
+            <h2>🔥 Trending Anime</h2>
+            <div id="animeGrid" class="grid"></div>
+        </section>
+    </main>
+
+    <!-- ============================================ -->
+    <!-- WATCHLIST TAB -->
+    <!-- ============================================ -->
+    <main id="watchlistTab" class="tab-content">
+        <section>
+            <h2>📋 Your Watchlist</h2>
+            <p style="color:#888; margin-bottom:10px;">Rate your favorite anime & track what you've watched!</p>
+            
+            <!-- Statistics Dashboard -->
+            <div id="stats" class="stats-dashboard">
+                <div class="stat-card"><span id="totalAnime">0</span> Total</div>
+                <div class="stat-card"><span id="watchedAnime">0</span> ✅ Watched</div>
+                <div class="stat-card"><span id="avgRating">0</span> ⭐ Avg Rating</div>
+                <div class="stat-card"><span id="badgeCount">0</span> 🏅 Badges</div>
+                <div class="stat-card"><span id="totalHours">0</span> ⏰ Hours</div>
+            </div>
+
+            <!-- Export/Import/Share -->
+            <div class="backup-buttons">
+                <button onclick="exportWatchlist()" class="action-btn export">📤 Export Backup</button>
+                <input type="file" id="importFile" accept=".json" style="display:none" />
+                <button onclick="document.getElementById('importFile').click()" class="action-btn import">📥 Import Backup</button>
+                <button onclick="shareWatchlist()" class="action-btn share">📤 Share</button>
+            </div>
+
+            <div id="watchlistGrid" class="grid"></div>
+        </section>
+    </main>
+
+    <!-- ============================================ -->
+    <!-- TOP 100 TAB -->
+    <!-- ============================================ -->
+    <main id="top100Tab" class="tab-content">
+        <section>
+            <h2>🏆 Top 100 Anime of All Time</h2>
+            <p style="color:#888; margin-bottom:20px;">The highest-rated anime according to MyAnimeList</p>
+            <div id="top100Grid" class="grid"></div>
+        </section>
+    </main>
+
+    <!-- ============================================ -->
+    <!-- COMMUNITY TAB (Chat) -->
+    <!-- ============================================ -->
+    <main id="communityTab" class="tab-content">
+        <section>
+            <h2>💬 Anime Community Hangout</h2>
+            <p style="color:#888; margin-bottom:15px;">Chat with other anime fans! Messages are saved locally.</p>
+            
+            <div id="chatSection" class="chat-section">
+                <div class="chat-header">
+                    <span>💬 Live Chat</span>
+                    <span id="chatOnline">🟢 1 online</span>
+                </div>
+                <div id="chatMessages" class="chat-messages">
+                    <div class="chat-message system">Welcome to the Anime Hangout! 🎉</div>
+                    <div class="chat-message system">Share what you're watching!</div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Type a message..." maxlength="100" />
+                    <button id="chatSendBtn">📨 Send</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============================================ -->
+    <!-- QUIZ TAB -->
+    <!-- ============================================ -->
+    <main id="quizTab" class="tab-content">
+        <section>
+            <h2>🎯 Anime Quiz Challenge</h2>
+            <p style="color:#888; margin-bottom:15px;">Test your anime knowledge!</p>
+            
+            <div class="quiz-container">
+                <div id="quizQuestion">Click "Start Quiz" to test your anime knowledge!</div>
+                <div id="quizOptions"></div>
+                <button id="quizStartBtn" class="quiz-btn">🚀 Start Quiz</button>
+                <div id="quizScore">Score: 0</div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 Shawn-Flix · All data saved locally · ⌨️ Ctrl+1-5 for tabs · Made with ❤️</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
